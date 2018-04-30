@@ -1,0 +1,8 @@
+acer
+apple
+asus
+dell
+lenovo
+samsung
+toshiba
+zyrex
