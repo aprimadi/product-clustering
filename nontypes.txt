@@ -1,0 +1,4 @@
+adaptor
+adapter
+charger
+keyboard

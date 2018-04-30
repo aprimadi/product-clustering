@@ -21,7 +21,7 @@ x = np.array(prices)
 # plt.title("Cost vs K")
 # plt.show()
 
-km = KMeans(8)
+km = KMeans(20)
 km = km.fit(x.reshape(-1, 1))
 
 cluster_range = {}

@@ -5,24 +5,28 @@ import matplotlib.pyplot as plt
 from nltk.stem import WordNetLemmatizer
 from sklearn.manifold import TSNE
 from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn.cluster import KMeans
 
 lemmatizer = WordNetLemmatizer()
 stopwords = set(w.rstrip() for w in open('stopwords.txt'))
+nontypes = set(w.rstrip() for w in open('nontypes.txt'))
 brands = set(w.rstrip() for w in open('brands.txt'))
-types = set(w.rstrip() for w in open('types.txt'))
+subbrands = set(w.rstrip() for w in open('subbrands.txt'))
 
 def tokenizer(s):
     s = s.lower()
     tokens = nltk.tokenize.word_tokenize(s)
-    tokens = [t for t in tokens if len(t) > 2] # remove short words, they're probably not useful
+    tokens = [t for t in tokens if len(t) > 2 or t == 'hp'] # remove short words, they're probably not useful
     tokens = [lemmatizer.lemmatize(t) for t in tokens] # put words into base form
     tokens = [t for t in tokens if t not in stopwords] # remove stopwords
     return tokens
 
 def token_appraiser(t):
-    if t in brands:
+    if t in nontypes:
+        return -100
+    elif t in brands:
         return 10
-    elif t in types:
+    elif t in subbrands:
         return 5
     else:
         return 1
@@ -33,84 +37,6 @@ def tokens_to_vector(tokens, word_index_map):
         i = word_index_map[t]
         x[i] += token_appraiser(t)
     return x
-
-# Distance function is a squared distance between two vectors
-def distance(u, v):
-    diff = u - v
-    return diff.dot(diff)
-
-def cost(X, R, M):
-    """TODO
-    Args:
-        X: Data - an (N, D) matrix
-        R: Confidence matrix that a data entry belongs to cluster k ϵ K - (N, K)
-        M: Cluster means - (K, D)
-    """
-    cost = 0
-    for k in range(len(M)):
-        # Method 1
-        # for n in range(len(X)):
-        #     cost += R[n,k]*d(M[k], X[n])
-
-        # Method 2
-        diff = X - M[k] # diff is an (N, D) matrix
-        # sq_distances is an N-dimensional vector
-        sq_distances = (diff * diff).sum(axis=1)
-        cost += (R[:,k] * sq_distances).sum()
-    return cost
-
-def kmeans(X, K, max_iter=100, beta=1.0):
-    """TODO
-    Args:
-        X: Data
-        K: Number of cluster
-    Returns:
-        A tuple M, R with the following definition:
-
-        M: Mean points of the cluster
-        R: Confidence score
-    """
-    N, D = X.shape
-    M = np.zeros((K, D))
-    # Each entry in R is like a confidence for i-th ϵ N dataset that it belongs
-    # to cluster k ϵ K.
-    #
-    # N is the size of the data and K is the number of cluster.
-    R = np.zeros((N, K))
-    exponents = np.empty((N, K))
-
-    # Initialize M to random
-    for k in range(K):
-        M[k] = X[np.random.choice(N)]
-
-    costs = np.zeros(max_iter)
-    for i in range(max_iter):
-        if (i+1) % 10 == 0:
-            print('Iteration:', i+1)
-        # Step 1: determine assignments / responsibilities
-        for k in range(K):
-            for n in range(N):
-                dist = distance(M[k], X[n])
-                exponents[n,k] = np.exp(-beta * dist)
-
-        # The second part of the term is a matrix of dimension (N, 1), numpy
-        # will do an automatic stacking horizontally, turning the denominator
-        # into an (N, K) matrix
-        #
-        # Note that we add one here to prevent division by zero
-        R = exponents / (exponents.sum(axis=1, keepdims=True) + 1)
-
-        # Step 2: recalculate means
-        for k in range(K):
-            # R[:,k] returns a matrix of size (1, N), when dotted with X (N, D),
-            # it turns into (1, D) matrix.
-            M[k] = R[:,k].dot(X) / R[:,k].sum()
-
-        costs[i] = cost(X, R, M)
-        if i > 0 and np.abs(costs[i] - costs[i-1]) < 10e-5:
-            break
-
-    return M, R
 
 def print_clusters(R, names):
     # print out the clusters
@@ -219,7 +145,32 @@ print('X shape:', X.shape)
 # print('X shape:', X.shape)
 # print('Z shape:', Z.shape)
 
-M, R = kmeans(X, 70, max_iter=10)
+# M, R = kmeans(X, 70, max_iter=10)
+
+km = KMeans(100)
+km = km.fit(X)
+
+clusters = {}
+for i in range(len(km.labels_)):
+    c = km.labels_[i]
+    if c not in clusters:
+        clusters[c] = []
+    clusters[c].append(" ".join(all_tokens[i]))
+sorted_clusters = sorted(clusters.items(), key=lambda x: x[0])
+for item in sorted_clusters:
+    print('Cluster', item[0], ' ->')
+    for product in item[1]:
+        print("\t", product)
+
+# costs = np.empty(20)
+# costs[0] = None
+# for k in range(1, 20):
+#     km = KMeans(k)
+#     km = km.fit(X)
+#     costs[k] = km.score(X)
+# plt.plot(costs)
+# plt.title("Cost vs K")
+# plt.show()
 
 # costs = np.empty(100)
 # costs[0] = None
@@ -230,5 +181,5 @@ M, R = kmeans(X, 70, max_iter=10)
 # plt.title("Cost vs K")
 # plt.show()
 
-product_names = [" ".join(tokens) for tokens in all_tokens]
-print_clusters(R, product_names)
+# product_names = [" ".join(tokens) for tokens in all_tokens]
+# print_clusters(R, product_names)

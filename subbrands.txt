@@ -1,5 +1,6 @@
 aspire
 inspire
 macbook
+pavilion
 thinkpad
 travelmate

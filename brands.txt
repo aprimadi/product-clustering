@@ -1,8 +1,15 @@
 acer
+alienware
 apple
 asus
+axioo
 dell
+fujitsu
+hp
 lenovo
+msi
 samsung
+sony
 toshiba
+xiaomi
 zyrex
