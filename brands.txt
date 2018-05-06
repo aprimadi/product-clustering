@@ -5,9 +5,14 @@ asus
 axioo
 dell
 fujitsu
+gigabyte
 hp
 lenovo
+macbook
 msi
+nec
+panasonic
+razer
 samsung
 sony
 toshiba

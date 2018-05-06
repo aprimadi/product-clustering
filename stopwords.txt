@@ -5,6 +5,7 @@ aplikasi
 bagus
 bandel
 bangat
+banget
 banyak
 bekas
 belum
@@ -16,10 +17,12 @@ besaran
 best
 bonus
 bos
+boss
 buat
 cepat
 cocok
 colokan
+core
 cuci
 cuma
 dan
@@ -38,6 +41,7 @@ gahar
 gaming
 gan
 garansi
+generation
 grafis
 gratis
 grosir
@@ -53,13 +57,20 @@ jam
 jaya
 joss
 juragan
+kaby
+kabylake
+kayu
 kehabisan
 kekinian
 kerja
 kondisi
+kumplit
+lake
 lama
 langka
+laptop
 lembur
+leptop
 like
 malang
 mantap
@@ -69,6 +80,7 @@ minat
 monggo
 mulus
 muluss
+muluz
 murah
 murmer
 nego
@@ -96,6 +108,7 @@ segel
 sehat
 seller
 semarang
+semua
 service
 siap
 siapa
@@ -118,5 +131,6 @@ terlihat
 termurah
 tinggal
 tinggi
+tipiz
 untuk
 yang

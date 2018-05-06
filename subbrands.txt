@@ -1,6 +1,59 @@
-aspire
 inspire
-macbook
 pavilion
-thinkpad
+
+# Acer
+aspire
+extenza
+predator
+swift
 travelmate
+
+# Asus
+rog
+vivobook
+zenbook
+
+# Dell
+inspiron
+latitude
+precision
+vostro
+xps
+
+# Fujitsu
+lifebook
+
+# HP
+elitebook
+spectre
+
+# Gigabyte
+sabre
+
+# Lenovo
+ideapad
+thinkpad
+yoga
+flex
+
+# Macbook
+air
+pro
+
+# Nec
+versapro
+
+# Razer
+blade
+
+# Sony
+vaio
+
+# Toshiba
+dynabook
+portege
+satellite
+
+# Xiaomi
+air
+pro
